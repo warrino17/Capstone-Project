@@ -1,10 +1,15 @@
 import React from 'react';
+import { Route, Routes } from 'react-router-dom';
+
+import CharacterList from './CharacterList';
+import CharacterCard from './CharacterCard';
 
 function UserProfile() {
   return (
-    <div>
-      <h1>UserProfile Placeholder</h1>
-    </div>
+    <Routes>
+      <Route path="/" element={<CharacterList />} />
+      <Route path=":characterId" element={<CharacterCard />} />
+    </Routes>
   );
 }
 

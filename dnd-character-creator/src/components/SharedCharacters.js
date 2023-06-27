@@ -1,10 +1,13 @@
 import React from 'react';
+import { Route, Routes } from 'react-router-dom';
+
+import CharacterCard from './CharacterCard';
 
 function SharedCharacters() {
   return (
-    <div>
-      <h1>SharedCharacters Placeholder</h1>
-    </div>
+    <Routes>
+      <Route path=":characterId" element={<CharacterCard />} />
+    </Routes>
   );
 }
 

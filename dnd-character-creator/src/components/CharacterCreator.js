@@ -1,10 +1,9 @@
 import React from 'react';
+import CharacterForm from './CharacterForm';
 
 function CharacterCreator() {
   return (
-    <div>
-      <h1>CharacterCreator Placeholder</h1>
-    </div>
+    <CharacterForm />
   );
 }
 
