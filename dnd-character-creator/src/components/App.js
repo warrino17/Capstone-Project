@@ -1,12 +1,11 @@
-import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
 import Navbar from './Navbar';
 import Home from './Home';
-import UserAuthentication from './UserAuthentication';
-import UserProfile from './UserProfile';
-import CharacterCreator from './CharacterCreator';
+import Login from './Login';
+import Register from './Register';
 import SharedCharacters from './SharedCharacters';
+import CharacterCreator from './CharacterCreator';
+import UserProfile from './UserProfile';
 
 function App() {
   return (
@@ -14,14 +13,16 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/auth/*" element={<UserAuthentication />} />
-        <Route path="/profile/*" element={<UserProfile />} />
-        <Route path="/create-character" element={<CharacterCreator />} />
-        <Route path="/shared-characters/*" element={<SharedCharacters />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/library" element={<SharedCharacters />} />
+        <Route path="/create" element={<CharacterCreator />} />
+        <Route path="/profile" element={<UserProfile />} />
       </Routes>
     </Router>
   );
 }
 
 export default App;
+
 
