@@ -43,59 +43,61 @@ function CharacterForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Name:
-        <input type="text" value={name} onChange={e => setName(e.target.value)} />
-      </label>
-      <label>
-        Race:
-        <input type="text" value={race} onChange={e => setRace(e.target.value)} />
-      </label>
-      <label>
-        Profession:
-        <input type="text" value={profession} onChange={e => setProfession(e.target.value)} />
-      </label>
-      <label>
-        Age:
-        <input type="number" min="1" value={age} onChange={e => setAge(e.target.value)} />
-      </label>
-      <label>
-        Weight:
-        <input type="number" min="1" value={weight} onChange={e => setWeight(e.target.value)} />
-      </label>
-      <label>
-        Strength:
-        <input type="number" min="8" max="17" value={strength} onChange={e => handleStatChange(e, setStrength)} />
-        <button type="button" onClick={() => rollDice(setStrength)}>🎲</button>
-      </label>
-      <label>
-        Dexterity:
-        <input type="number" min="8" max="17" value={dexterity} onChange={e => handleStatChange(e, setDexterity)} />
-        <button type="button" onClick={() => rollDice(setDexterity)}>🎲</button>
-      </label>
-      <label>
-        Constitution:
-        <input type="number" min="8" max="17" value={constitution} onChange={e => handleStatChange(e, setConstitution)} />
-        <button type="button" onClick={() => rollDice(setConstitution)}>🎲</button>
-      </label>
-      <label>
-        Intelligence:
-        <input type="number" min="8" max="17" value={intelligence} onChange={e => handleStatChange(e, setIntelligence)} />
-        <button type="button" onClick={() => rollDice(setIntelligence)}>🎲</button>
-      </label>
-      <label>
-        Wisdom:
-        <input type="number" min="8" max="17" value={wisdom} onChange={e => handleStatChange(e, setWisdom)} />
-        <button type="button" onClick={() => rollDice(setWisdom)}>🎲</button>
-      </label>
-      <label>
-        Charisma:
-        <input type="number" min="8" max="17" value={charisma} onChange={e => handleStatChange(e, setCharisma)} />
-        <button type="button" onClick={() => rollDice(setCharisma)}>🎲</button>
-      </label>
-      <input type="submit" value="Submit" />
-    </form>
+    <div className="character-form-container">
+      <form onSubmit={handleSubmit}>
+        <label>
+          Name:
+          <input type="text" value={name} onChange={e => setName(e.target.value)} />
+        </label>
+        <label>
+          Race:
+          <input type="text" value={race} onChange={e => setRace(e.target.value)} />
+        </label>
+        <label>
+          Profession:
+          <input type="text" value={profession} onChange={e => setProfession(e.target.value)} />
+        </label>
+        <label>
+          Age:
+          <input type="number" min="1" value={age} onChange={e => setAge(e.target.value)} />
+        </label>
+        <label>
+          Weight:
+          <input type="number" min="1" value={weight} onChange={e => setWeight(e.target.value)} />
+        </label>
+        <label>
+          Strength:
+          <input type="number" min="8" max="17" value={strength} onChange={e => handleStatChange(e, setStrength)} />
+          <button type="button" onClick={() => rollDice(setStrength)}>🎲</button>
+        </label>
+        <label>
+          Dexterity:
+          <input type="number" min="8" max="17" value={dexterity} onChange={e => handleStatChange(e, setDexterity)} />
+          <button type="button" onClick={() => rollDice(setDexterity)}>🎲</button>
+        </label>
+        <label>
+          Constitution:
+          <input type="number" min="8" max="17" value={constitution} onChange={e => handleStatChange(e, setConstitution)} />
+          <button type="button" onClick={() => rollDice(setConstitution)}>🎲</button>
+        </label>
+        <label>
+          Intelligence:
+          <input type="number" min="8" max="17" value={intelligence} onChange={e => handleStatChange(e, setIntelligence)} />
+          <button type="button" onClick={() => rollDice(setIntelligence)}>🎲</button>
+        </label>
+        <label>
+          Wisdom:
+          <input type="number" min="8" max="17" value={wisdom} onChange={e => handleStatChange(e, setWisdom)} />
+          <button type="button" onClick={() => rollDice(setWisdom)}>🎲</button>
+        </label>
+        <label>
+          Charisma:
+          <input type="number" min="8" max="17" value={charisma} onChange={e => handleStatChange(e, setCharisma)} />
+          <button type="button" onClick={() => rollDice(setCharisma)}>🎲</button>
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
+    </div>
   );
 }
 

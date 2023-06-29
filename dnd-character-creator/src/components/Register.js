@@ -1,20 +1,36 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import UserContext from './UserContext';
 import './Register.css';
 
 function Register() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
+
+  const { setToken, setUser } = useContext(UserContext);
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (password !== confirmPassword) {
+      setError('Passwords do not match!');
+      return;
+    }
+
     try {
-      const response = await axios.post('/register', { username, password, email });
-      console.log(response.data.message);
+      const response = await axios.post('http://localhost:5000/register', { username, password, email });
+      const { token, user } = response.data;
+
+      setToken(token);
+      setUser(user);
+
+      navigate('/');
     } catch (error) {
       setError('Registration failed');
     }
@@ -53,6 +69,15 @@ function Register() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
+          <div className="form-group">
+            <label htmlFor="confirmPassword">Confirm Password:</label>
+            <input
+              type="password"
+              id="confirmPassword"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </div>
           <button type="submit">Register</button>
         </form>
         <h3>
@@ -64,3 +89,5 @@ function Register() {
 }
 
 export default Register;
+
+

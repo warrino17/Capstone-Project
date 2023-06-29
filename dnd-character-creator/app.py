@@ -1,9 +1,25 @@
 from flask import Flask, request, jsonify, session
 from flask_migrate import Migrate
+from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, User, Character, CharacterSchema
+import jwt
+import datetime
+
+def generate_token(user):
+    payload = {
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, minutes=30),
+        'iat': datetime.datetime.utcnow(),
+        'sub': user.id
+    }
+    return jwt.encode(
+        payload,
+        app.config.get('SECRET_KEY'),
+        algorithm='HS256'
+    )
 
 app = Flask(__name__)
+CORS(app)
 app.config['SECRET_KEY'] = 'warrino'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -19,17 +35,22 @@ def register():
     data = request.get_json()
     username = data['username']
     password = data['password']
+    email = data['email']  
 
     if User.query.filter_by(username=username).first():
         return jsonify({"error": "Username already exists"}), 400
+    if User.query.filter_by(email=email).first():  
+        return jsonify({"error": "Email already exists"}), 400
 
     hashed_password = generate_password_hash(password)
-    new_user = User(username=username, password=hashed_password)
+    new_user = User(username=username, password=hashed_password, email=email)  
 
     db.session.add(new_user)
     db.session.commit()
 
     return jsonify({"message": "Registered successfully"}), 201
+
+
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -39,12 +60,27 @@ def login():
 
     user = User.query.filter_by(username=username).first()
 
+    print(f'User-supplied password: {password}')
+    if user:
+        print(f'Hash from database: {user.password}')
+        print(f'Result of check_password_hash: {check_password_hash(user.password, password)}')
+
     if not user or not check_password_hash(user.password, password):
         return jsonify({"error": "Invalid username or password"}), 401
 
     session['user_id'] = user.id
 
-    return jsonify({"message": "Logged in successfully"}), 200
+    user_data = {
+        'id': user.id,
+        'username': user.username,
+        'email': user.email
+    }
+
+    token = generate_token(user)
+
+    return jsonify({"message": "Logged in successfully", "user": user_data, "token": token}), 200
+
+
 
 @app.route('/logout', methods=['GET'])
 def logout():
@@ -82,13 +118,15 @@ def create_character():
         intelligence=data['intelligence'],
         wisdom=data['wisdom'],
         charisma=data['charisma'],
-        user_id=session['user_id']
+        user_id=session['user_id'],
+        email=data['email']  
     )
 
     db.session.add(new_character)
     db.session.commit()
 
     return jsonify({"message": "Character created successfully"}), 201
+
 
 @app.route('/characters/<int:character_id>', methods=['PUT'])
 def update_character(character_id):

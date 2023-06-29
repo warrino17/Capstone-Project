@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 
-function Navbar() {
+function Navbar({ isLoggedIn }) {
   return (
     <nav className="navbar">
       <img 
@@ -14,7 +14,11 @@ function Navbar() {
       <Link to="/library" className="nav-link">Library</Link>
       <Link to="/create" className="nav-link">Create</Link>
       <Link to="/register" className="nav-link">Register</Link>
-      <Link to="/login" className="nav-link">Login</Link>
+      {isLoggedIn ? (
+        <Link to="/profile" className="nav-link">Profile</Link>
+      ) : (
+        <Link to="/login" className="nav-link">Login</Link>
+      )}
     </nav>
   );
 }

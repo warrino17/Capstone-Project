@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import UserContext from './UserContext';
 import './Login.css';
 
 function Login() {
@@ -8,16 +9,44 @@ function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
+  const navigate = useNavigate();
+
+  const { setToken, setUser, setIsLoggedIn } = useContext(UserContext);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('/login', { username, password });
-      console.log(response.data.message);
+      const response = await axios.post('http://localhost:5000/login', { username, password });
+      console.log(response.data);
+
+      const { token, user } = response.data;
+
+      setToken(token);
+      setUser(user);
+
+      setIsLoggedIn(true);
+      
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+      localStorage.setItem('token', token);
+
+      navigate('/');
+      
     } catch (error) {
-      setError('Invalid username or password');
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        setError(error.response.data.error);
+      } else if (error.request) {
+        // The request was made but no response was received
+        setError('No response from server. Please check your connection.');
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        setError('An error occurred while logging in.');
+      }
     }
-  };
+  }
+  
 
   return (
     <div className="login-container">

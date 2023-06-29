@@ -29,6 +29,7 @@ class Character(db.Model):
     wisdom = db.Column(db.Integer)
     charisma = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    email = db.Column(db.String(120), nullable=False)
 
     def __repr__(self):
         return f"Character('{self.name}', '{self.race}', '{self.profession}')"
@@ -61,3 +62,4 @@ class CharacterSchema(Schema):
     intelligence = fields.Int()
     wisdom = fields.Int()
     charisma = fields.Int()
+    email = fields.Str(required=True)
