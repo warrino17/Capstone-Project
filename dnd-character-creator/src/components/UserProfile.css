@@ -49,9 +49,7 @@
   
   .errorMessage::first-letter {
     text-transform: uppercase;
-  }
-  
-  /* Additional creative styles */
+  } 
   
   .userProfileContainer {
     position: relative;
