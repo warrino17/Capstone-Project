@@ -8,10 +8,6 @@ function Home() {
       </header>
       <h1>Welcome to KingMaker</h1>
       <p>Create, save, and share your custom Dungeons and Dragons characters.</p>
-
-      <footer className="footer">
-        <p>© 2023 KingMaker. All rights reserved.</p>
-      </footer>
     </div>
   );
 }

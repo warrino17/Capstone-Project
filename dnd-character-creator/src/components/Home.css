@@ -13,6 +13,7 @@ html, body {
   background-repeat: repeat;
   background-size: 100%; 
   min-height: 80vh; 
+  height: 800px;
 }
 
 .home-header {
@@ -54,15 +55,5 @@ p {
   font-size: 1.25rem;
 }
 
-.footer {
-  position: fixed;
-  bottom: 0;
-  width: 100vw;
-  height: 2.5rem;
-  background-color: #282c34;
-  color: white;
-  text-align: center;
-  padding: 1rem 0;
-}
 
 
