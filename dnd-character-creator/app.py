@@ -168,6 +168,15 @@ def delete_character(current_user, character_id):
 
     return jsonify({"message": "Character deleted successfully"}), 200
 
+@app.route('/all', methods=['GET'])
+@token_required
+def get_all_characters(current_user):
+    schema = CharacterSchema()
+    characters = Character.query.all()
+    result = [schema.dump(character) for character in characters]
+    return jsonify({"characters": result})
+
+
 
 @app.errorhandler(404)
 def not_found(error):

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import './CharacterCard.css'
 
-function CharacterCard() {
+function CharacterCard( {}) {
   const [character, setCharacter] = useState(null);
   const [error, setError] = useState(null);
   const { characterId } = useParams();

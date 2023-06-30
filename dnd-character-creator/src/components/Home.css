@@ -1,3 +1,9 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+
 .home-container {
   text-align: center;
   background-color: #fafafa;
@@ -49,13 +55,14 @@ p {
 }
 
 .footer {
-  position: absolute;
+  position: fixed;
   bottom: 0;
-  width: 100%;
+  width: 100vw;
   height: 2.5rem;
   background-color: #282c34;
   color: white;
   text-align: center;
   padding: 1rem 0;
 }
+
 

@@ -49,5 +49,7 @@ form {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    margin: auto;
+    margin: none;
+    width: stretch;
+    height: 835px;
   }
