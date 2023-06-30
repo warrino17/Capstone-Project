@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import UserContext from './UserContext';
+import axios from 'axios';
 import './CharacterForm.css';
 
 function CharacterForm() {
+  const { user, setUserCharacters } = useContext(UserContext);
+
   const [name, setName] = useState('');
   const [race, setRace] = useState('');
   const [profession, setProfession] = useState('');
@@ -14,9 +18,9 @@ function CharacterForm() {
   const [wisdom, setWisdom] = useState(8);
   const [charisma, setCharisma] = useState(8);
 
-  const handleSubmit = event => {
+  const handleSubmit = async event => {
     event.preventDefault();
-    console.log({
+    const character = {
       name,
       race,
       profession,
@@ -28,7 +32,21 @@ function CharacterForm() {
       intelligence,
       wisdom,
       charisma,
-    });
+      email: user.email,
+    };
+
+    try {
+      const response = await axios.post('http://localhost:5000/characters', character, {  
+        headers: {
+          'x-access-tokens': localStorage.getItem('token'),
+        },
+      });
+
+
+      setUserCharacters(prevCharacters => [...prevCharacters, response.data]);
+    } catch (error) {
+      console.error('There was an error creating the character!', error);
+    }
   };
 
   const handleStatChange = (e, setter) => {
@@ -36,11 +54,12 @@ function CharacterForm() {
     if (stat < 8) setter(8);
     else if (stat > 17) setter(17);
     else setter(stat);
-  }
+  };
 
   const rollDice = (setter) => {
     setter(Math.floor(Math.random() * 10) + 8);
-  }
+  };
+
 
   return (
     <div className="character-form-container">

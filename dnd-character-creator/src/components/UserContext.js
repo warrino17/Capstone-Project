@@ -5,8 +5,11 @@ const UserContext = createContext({
   setToken: () => {},
   user: null,
   setUser: () => {},
-  isLoggedIn: false,  
-  setIsLoggedIn: () => {},  
+  isLoggedIn: false,
+  setIsLoggedIn: () => {},
+  userCharacters: [],
+  setUserCharacters: () => {},
 });
+
 
 export default UserContext;

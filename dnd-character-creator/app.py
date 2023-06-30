@@ -1,14 +1,26 @@
-from flask import Flask, request, jsonify, session
+from flask import Flask, request, jsonify
 from flask_migrate import Migrate
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, User, Character, CharacterSchema
 import jwt
 import datetime
+from functools import wraps
+from marshmallow.exceptions import ValidationError
+
+
+app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
+app.config['SECRET_KEY'] = 'warrino'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db.init_app(app)
+migrate = Migrate(app, db)
+
 
 def generate_token(user):
     payload = {
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, minutes=30),
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=365, minutes=30),
         'iat': datetime.datetime.utcnow(),
         'sub': user.id
     }
@@ -18,38 +30,51 @@ def generate_token(user):
         algorithm='HS256'
     )
 
-app = Flask(__name__)
-CORS(app)
-app.config['SECRET_KEY'] = 'warrino'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db.init_app(app)
-migrate = Migrate(app, db)
+
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+        if 'x-access-tokens' in request.headers:
+            token = request.headers['x-access-tokens']
+        if not token:
+            return jsonify({'message': 'Token is missing!'}), 401
+
+        try:
+            data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+            current_user = User.query.filter_by(id=data['sub']).first()   
+        except:
+            return jsonify({'message': 'Token is invalid!'}), 401
+
+        return f(current_user, *args, **kwargs)
+
+    return decorated
+
 
 @app.route('/')
 def home():
     return "Welcome to KingMaker!"
+
 
 @app.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
     username = data['username']
     password = data['password']
-    email = data['email']  
+    email = data['email']
 
     if User.query.filter_by(username=username).first():
         return jsonify({"error": "Username already exists"}), 400
-    if User.query.filter_by(email=email).first():  
+    if User.query.filter_by(email=email).first():
         return jsonify({"error": "Email already exists"}), 400
 
     hashed_password = generate_password_hash(password)
-    new_user = User(username=username, password=hashed_password, email=email)  
+    new_user = User(username=username, password=hashed_password, email=email)
 
     db.session.add(new_user)
     db.session.commit()
 
     return jsonify({"message": "Registered successfully"}), 201
-
 
 
 @app.route('/login', methods=['POST'])
@@ -60,46 +85,35 @@ def login():
 
     user = User.query.filter_by(username=username).first()
 
-    print(f'User-supplied password: {password}')
-    if user:
-        print(f'Hash from database: {user.password}')
-        print(f'Result of check_password_hash: {check_password_hash(user.password, password)}')
-
     if not user or not check_password_hash(user.password, password):
         return jsonify({"error": "Invalid username or password"}), 401
 
-    session['user_id'] = user.id
-
+    token = generate_token(user)
+    
     user_data = {
         'id': user.id,
         'username': user.username,
-        'email': user.email
+        'email': user.email,
     }
 
-    token = generate_token(user)
-
-    return jsonify({"message": "Logged in successfully", "user": user_data, "token": token}), 200
+    return jsonify({"message": "Logged in successfully", "token": token, "user": user_data}), 200
 
 
-
-@app.route('/logout', methods=['GET'])
-def logout():
-    session.pop('user_id', None)
-    return jsonify({"message": "Logged out successfully"}), 200
 
 @app.route('/characters', methods=['GET'])
-def get_characters():
-    if 'user_id' not in session:
-        return jsonify({"error": "Not logged in"}), 401
+@token_required
+def get_characters(current_user):
+    characters = Character.query.filter_by(user_id=current_user.id).all()
 
-    characters = Character.query.filter_by(user_id=session['user_id']).all()
-    return jsonify([char.to_dict() for char in characters]), 200
+    if characters:
+        return jsonify([char.to_dict() for char in characters]), 200
+    else:
+        return jsonify([]), 200
+
 
 @app.route('/characters', methods=['POST'])
-def create_character():
-    if 'user_id' not in session:
-        return jsonify({"error": "Not logged in"}), 401
-
+@token_required
+def create_character(current_user):
     schema = CharacterSchema()
     try:
         data = schema.load(request.get_json())
@@ -118,8 +132,8 @@ def create_character():
         intelligence=data['intelligence'],
         wisdom=data['wisdom'],
         charisma=data['charisma'],
-        user_id=session['user_id'],
-        email=data['email']  
+        user_id=current_user.id,
+        email=current_user.email
     )
 
     db.session.add(new_character)
@@ -129,12 +143,10 @@ def create_character():
 
 
 @app.route('/characters/<int:character_id>', methods=['PUT'])
-def update_character(character_id):
-    if 'user_id' not in session:
-        return jsonify({"error": "Not logged in"}), 401
-
+@token_required
+def update_character(current_user, character_id):
     character = Character.query.get(character_id)
-    if character is None or character.user_id != session['user_id']:
+    if character is None or character.user_id != current_user.id:
         return jsonify({"error": "Character not found"}), 404
 
     data = request.get_json()
@@ -149,13 +161,12 @@ def update_character(character_id):
 
     return jsonify({"message": "Character updated successfully"}), 200
 
-@app.route('/characters/<int:character_id>', methods=['DELETE'])
-def delete_character(character_id):
-    if 'user_id' not in session:
-        return jsonify({"error": "Not logged in"}), 401
 
+@app.route('/characters/<int:character_id>', methods=['DELETE'])
+@token_required
+def delete_character(current_user, character_id):
     character = Character.query.get(character_id)
-    if character is None or character.user_id != session['user_id']:
+    if character is None or character.user_id != current_user.id:
         return jsonify({"error": "Character not found"}), 404
 
     db.session.delete(character)
@@ -168,10 +179,13 @@ def delete_character(character_id):
 def not_found(error):
     return jsonify({"error": "Not Found"}), 404
 
+
 @app.errorhandler(500)
 def internal_server_error(error):
     return jsonify({"error": "Internal Server Error"}), 500
 
+
 if __name__ == '__main__':
     app.run(debug=True)
+
 

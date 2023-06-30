@@ -1,9 +1,46 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import UserContext from './UserContext';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import './CharacterList.css';
 
-function CharacterList() {
+function CharacterList({ userCharacters }) {
+  const { setUserCharacters } = useContext(UserContext);
+
+  const handleDelete = async (characterId) => {
+    try {
+      await axios.delete(`/characters/${characterId}`);
+      setUserCharacters((prevCharacters) =>
+        prevCharacters.filter((character) => character.id !== characterId)
+      );
+    } catch (error) {
+      console.error('Error deleting character:', error);
+    }
+  };
+
   return (
-    <div>
-      <h1>CharacterList Placeholder</h1>
+    <div className="characterListContainer">
+      <h1>Your Characters</h1>
+      {userCharacters ? (
+        userCharacters.length > 0 ? (
+          userCharacters.map((character) => (
+            <div key={character.id} className="characterItem">
+              <div className="characterInfo">
+                <h2>
+                  <Link to={`/characters/${character.id}`}>{character.name}</Link>
+                </h2>
+              </div>
+              <button className="deleteButton" onClick={() => handleDelete(character.id)}>
+                Delete
+              </button>
+            </div>
+          ))
+        ) : (
+          <p>You don't have any characters yet!</p>
+        )
+      ) : (
+        <p>Loading characters...</p>
+      )}
     </div>
   );
 }

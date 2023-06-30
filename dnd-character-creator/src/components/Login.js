@@ -7,11 +7,10 @@ import './Login.css';
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const { handleLogin } = useContext(UserContext);
   const [error, setError] = useState('');
 
   const navigate = useNavigate();
-
-  const { setToken, setUser, setIsLoggedIn } = useContext(UserContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,31 +21,21 @@ function Login() {
 
       const { token, user } = response.data;
 
-      setToken(token);
-      setUser(user);
-
-      setIsLoggedIn(true);
-      
-      localStorage.setItem('user', JSON.stringify(response.data.user));
-      localStorage.setItem('token', token);
+      // Use the handleLogin function to set the user, token, and isLoggedIn state
+      handleLogin(user, token);
 
       navigate('/');
       
     } catch (error) {
       if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
         setError(error.response.data.error);
       } else if (error.request) {
-        // The request was made but no response was received
         setError('No response from server. Please check your connection.');
       } else {
-        // Something happened in setting up the request that triggered an Error
         setError('An error occurred while logging in.');
       }
     }
   }
-  
 
   return (
     <div className="login-container">
@@ -83,4 +72,5 @@ function Login() {
 }
 
 export default Login;
+
 

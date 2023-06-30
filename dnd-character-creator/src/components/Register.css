@@ -1,65 +1,74 @@
 .register-container {
-    width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-  }
-  
-  .register-form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .register-form h2 {
-    text-align: center;
-    color: #333;
-    margin-bottom: 20px;
-  }
-  
-  .register-form .form-group {
-    margin-bottom: 20px;
-  }
-  
-  .register-form label {
-    font-weight: bold;
-    color: #555;
-    margin-bottom: 5px;
-  }
-  
-  .register-form input[type="text"],
-  .register-form input[type="password"],
-  .register-form input[type="email"] {
-    padding: 10px;
-    margin-left: 5px;
-    border-radius: 3px;
-    border: none;
-    background-color: #f5f5f5;
-  }
-  
-  .register-form button {
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: #fff;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-  }
-  
-  .register-form button:hover {
-    background-color: #45a049;
-  }
-  
-  .register-form h3 {
-    text-align: center;
-    margin-top: 20px;
-    color: #666;
-  }
-  
-  .register-form h3 a {
-    color: #4CAF50;
-    text-decoration: none;
-    font-weight: bold;
-  }
-  
+  width: cover;
+  margin: auto;
+  padding: 2rem;
+  background-image: linear-gradient(to bottom, rgba(174, 195, 219, 0.8), rgba(249, 249, 249, 0.8)), url('https://i.pinimg.com/originals/ed/dc/38/eddc38561c7b1d1a6e39f9536a2c3d54.png');
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  text-align: center;
+}
+
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.register-form h2 {
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+.register-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.register-form label {
+  display: block;
+  font-weight: bold;
+  color: #555;
+  margin-bottom: 0.5rem;
+}
+
+.register-form input[type="text"],
+.register-form input[type="password"],
+.register-form input[type="email"] {
+  padding: 0.8rem;
+  width: 100%;
+  border-radius: 3px;
+  border: none;
+  background-color: #f5f5f5;
+}
+
+.register-form button {
+  padding: 1rem 2rem;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.register-form button:hover {
+  background-color: #45a049;
+}
+
+.register-form p {
+  margin-top: 1.5rem;
+  color: #666;
+}
+
+.register-form p a {
+  color: #4CAF50;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.error-message {
+  color: red;
+  margin-bottom: 1rem;
+}

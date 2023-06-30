@@ -45,8 +45,9 @@ form {
   }
   
   .character-form-container {
-    background-image: url("https://cdnb.artstation.com/p/assets/images/images/045/473/937/large/gokhan-kahraman-early-character-creation-background-concept-01.jpg?1642790132");
+    background-image: linear-gradient(to bottom, rgba(111, 116, 122, 0.8), rgba(163, 146, 146, 0.8)), url("https://cdnb.artstation.com/p/assets/images/images/045/473/937/large/gokhan-kahraman-early-character-creation-background-concept-01.jpg?1642790132");
     background-repeat: no-repeat;
-    background-size: 100%;
+    background-size: cover;
     background-position: center;
+    margin: auto;
   }
