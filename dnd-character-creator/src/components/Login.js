@@ -63,8 +63,8 @@ function Login() {
           </div>
           <button type="submit">Login</button>
         </form>
-        <h3>
-          Don't have an account? <Link to="/register">Register</Link>
+        <h3 className = "center-text">
+          Don't have an account? <Link to="/register" className="register-link">Register</Link>
         </h3>
       </div>
     </div>

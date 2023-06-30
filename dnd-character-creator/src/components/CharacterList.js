@@ -5,11 +5,14 @@ import axios from 'axios';
 import './CharacterList.css';
 
 function CharacterList({ userCharacters }) {
-  const { setUserCharacters } = useContext(UserContext);
-
+  const { user, setUserCharacters } = useContext(UserContext);
   const handleDelete = async (characterId) => {
     try {
-      await axios.delete(`/characters/${characterId}`);
+      await axios.delete(`http://localhost:5000/characters/${characterId}`, {
+        headers: {
+          'x-access-tokens': localStorage.getItem('token')
+        }
+      });
       setUserCharacters((prevCharacters) =>
         prevCharacters.filter((character) => character.id !== characterId)
       );
@@ -24,7 +27,7 @@ function CharacterList({ userCharacters }) {
       {userCharacters ? (
         userCharacters.length > 0 ? (
           userCharacters.map((character) => (
-            <div key={character.id} className="characterItem">
+            <div key={character.id + character.intelligence} className="characterItem">
               <div className="characterInfo">
                 <h2>
                   <Link to={`/characters/${character.id}`}>{character.name}</Link>

@@ -48,7 +48,7 @@ function UserProfile() {
   };
 
   return (
-    <UserContext.Provider value={{  }}>
+    // <UserContext.Provider value={{  }}>
       <div className="userProfileContainer">
         {errorMessage && <p>{errorMessage}</p>}
         <button className="logoutButton" onClick={handleLogout}>Logout</button>
@@ -64,7 +64,7 @@ function UserProfile() {
           <Route path="character/:id" element={<CharacterCard />} />
         </Routes>
       </div>
-    </UserContext.Provider>
+    // </UserContext.Provider>
   );
 }
 

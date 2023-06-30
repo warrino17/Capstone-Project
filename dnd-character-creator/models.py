@@ -48,6 +48,8 @@ class Character(db.Model):
             "intelligence": self.intelligence,
             "wisdom": self.wisdom,
             "charisma": self.charisma,
+            "user_id": self.user_id,
+            "email": self.email
         }
 
 class CharacterSchema(Schema):

@@ -1,11 +1,11 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, } from 'react';
+import { useNavigate } from 'react-router-dom';
 import UserContext from './UserContext';
 import axios from 'axios';
 import './CharacterForm.css';
 
 function CharacterForm() {
   const { user, setUserCharacters } = useContext(UserContext);
-
   const [name, setName] = useState('');
   const [race, setRace] = useState('');
   const [profession, setProfession] = useState('');
@@ -17,6 +17,7 @@ function CharacterForm() {
   const [intelligence, setIntelligence] = useState(8);
   const [wisdom, setWisdom] = useState(8);
   const [charisma, setCharisma] = useState(8);
+  const navigate = useNavigate();
 
   const handleSubmit = async event => {
     event.preventDefault();
@@ -41,12 +42,15 @@ function CharacterForm() {
           'x-access-tokens': localStorage.getItem('token'),
         },
       });
-
-
+    console.log(response.data)
       setUserCharacters(prevCharacters => [...prevCharacters, response.data]);
+    
+      // Redirect to the homepage
+      navigate('/');
     } catch (error) {
       console.error('There was an error creating the character!', error);
     }
+    
   };
 
   const handleStatChange = (e, setter) => {

@@ -139,36 +139,30 @@ def create_character(current_user):
     db.session.add(new_character)
     db.session.commit()
 
-    return jsonify({"message": "Character created successfully"}), 201
+    result = schema.dump(new_character)
+
+    return jsonify({'id': new_character.id, **result}), 201
 
 
-@app.route('/characters/<int:character_id>', methods=['PUT'])
+@app.route('/characters/<int:character_id>', methods=['GET'])
 @token_required
-def update_character(current_user, character_id):
+def get_character(current_user, character_id):
     character = Character.query.get(character_id)
     if character is None or character.user_id != current_user.id:
         return jsonify({"error": "Character not found"}), 404
 
-    data = request.get_json()
-    try:
-        data = CharacterSchema().load(data)
-    except ValidationError as err:
-        return jsonify(err.messages), 400
-
-    for key, value in data.items():
-        setattr(character, key, value)
-    db.session.commit()
-
-    return jsonify({"message": "Character updated successfully"}), 200
+    return jsonify(character.to_dict()), 200
 
 
 @app.route('/characters/<int:character_id>', methods=['DELETE'])
 @token_required
 def delete_character(current_user, character_id):
+    print('test')
     character = Character.query.get(character_id)
+    
     if character is None or character.user_id != current_user.id:
         return jsonify({"error": "Character not found"}), 404
-
+    
     db.session.delete(character)
     db.session.commit()
 

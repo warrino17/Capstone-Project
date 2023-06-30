@@ -50,7 +50,6 @@ function App() {
       },
     });
 
-    console.log('Received response from server:', response);
 
     if (response.data && Array.isArray(response.data)) {
       setUserCharacters(response.data);
@@ -63,8 +62,7 @@ function App() {
   }
 };
 
-useEffect(() => {
-  console.log(userCharacters);
+  useEffect(() => {
 }, [userCharacters]);
 
 
@@ -87,7 +85,7 @@ useEffect(() => {
           <Route path="/library/*" element={<SharedCharacters />} />
           <Route path="/create" element={<CharacterForm />} />
           <Route path="/profile/*" element={<UserProfile />} />
-          <Route path="/" element={<CharacterList />} />
+          {/* <Route path="/" element={<CharacterList />} /> */}
           <Route path="/characters/:characterId" element={<CharacterCard />} />
         </Routes>
       </UserContext.Provider>

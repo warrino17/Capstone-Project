@@ -52,3 +52,21 @@
     background-color: #45a049;
   }
   
+  .center-text {
+    text-align: center;
+    margin-top: 20px;
+    color: #888; 
+    font-size: 18px; 
+    font-style: italic; 
+    font-family: Arial, sans-serif; 
+  }
+  
+  .register-link {
+    color: #4CAF50; 
+    text-decoration: none; 
+  }
+  
+  .register-link:hover {
+    color: #45a049; 
+  }
+  

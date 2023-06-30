@@ -1,0 +1,41 @@
+.CharacterCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    width: 60%;
+    padding: 20px;
+    border: 2px solid #000;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+  }
+  
+  .CharacterCard h1 {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 2em;
+    text-align: center;
+  }
+  
+  .CharacterCard p {
+    margin: 5px 0;
+    color: #666;
+    font-size: 1.2em;
+    line-height: 1.5;
+  }
+  
+  .CharacterCard div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .CharacterCard div:last-child {
+    border-bottom: none;
+  }
+  
